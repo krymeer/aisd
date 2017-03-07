@@ -182,14 +182,15 @@ void destroy(struct singlyLinkedList **list) {
   *list = NULL;
 }
 
-long int measureTime (struct singlyLinkedList *list, int index) {
+long measureTime (struct singlyLinkedList *list, int index) {
   /* struktury niezbędne do funkcji gettimeofday */
   struct timeval bef, aft;       
   gettimeofday(&bef, 0);
   getByIndex (list, index);
   gettimeofday(&aft, 0);
   /* czas, jaki upłynął (w mikrosekundach) */
-  return aft.tv_usec-bef.tv_usec;
+  long elapsed = (aft.tv_sec-bef.tv_sec)*1000000 + aft.tv_usec-bef.tv_usec;
+  return elapsed;
 }
 
 int main(int argc, char *argv[]) {
@@ -212,7 +213,7 @@ int main(int argc, char *argv[]) {
 
     int sum = 0;
     for (i = 0; i < n; i++) {
-      sum += measureTime(bigList, (rand() % 1000));
+      sum += measureTime(bigList, rand() % n);
     }
     printf("\nAverage time of accessing a randomly chosen element: %d.%d μs.\n", sum/n, sum%n); 
   } else {

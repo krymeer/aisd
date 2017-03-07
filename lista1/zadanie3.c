@@ -37,9 +37,9 @@ int getByIndex(struct doublyLinkedList *node, int n, char way) {
     return -1;
   } else {
     int h = total/2, i = 0;
-    if (way == 'd') {
+    if (way == 'l') {
       h = -1;
-    } else if (way == 'a') {
+    } else if (way == 'r') {
       h = 999999999;
     }
 
@@ -181,14 +181,15 @@ int pop(struct doublyLinkedList **list, int index) {
   }
 }
 
-long int measureTime (struct doublyLinkedList *list, int index, char way) {
+long measureTime (struct doublyLinkedList *list, int index, char way) {
   /* struktury niezbędne do funkcji gettimeofday */
   struct timeval bef, aft;       
   gettimeofday(&bef, 0);
   getByIndex (list, index, way);
   gettimeofday(&aft, 0);
   /* czas, jaki upłynął (w mikrosekundach) */
-  return aft.tv_usec-bef.tv_usec;
+  long elapsed = (aft.tv_sec-bef.tv_sec)*1000000 + aft.tv_usec-bef.tv_usec;
+  return elapsed;
 }
 
 struct doublyLinkedList *merge(struct doublyLinkedList **list1, struct doublyLinkedList **list2) {
@@ -290,23 +291,24 @@ int main(int argc, char* argv[]) {
 
     int sum = 0;
     for (i = 0; i < n; i++) {
-      sum += measureTime(bigList, (rand() % 1000), 'r');
+      sum += measureTime(bigList, rand() % n, '0');
     }
     printf("\n");
     printf("Average time of accessing a randomly chosen element: %d.%d μs\n", sum/n, sum%n);
 
-    sum = 0;
-    for (i = 0; i < n; i++) {
-      sum += measureTime(bigList, 332, 'a');
+    if (n == 1000) {
+      sum = 0;
+      for (i = 0; i < n; i++) {
+        sum += measureTime(bigList, 332, 'r');
+      }
+      printf("\n");
+      printf("Average time of accessing a 333th element: %d.%d", sum/n, sum%n);
+      sum = 0;
+      for (i = 0; i < n; i++) {
+        sum += measureTime(bigList, 332, 'l');
+      }
+      printf(" / %d.%d μs\n", sum/n, sum%n);
     }
-    printf("\n");
-    printf("Average time of accessing a 333th element: %d.%d μs", sum/n, sum%n);
-    sum = 0;
-    for (i = 0; i < n; i++) {
-      sum += measureTime(bigList, 332, 'd');
-    }
-    printf("/ %d.%d μs\n", sum/n, sum%n);
-
   } else {
     struct doublyLinkedList *list1 = NULL, *list2 = NULL;
     printf("\n");
@@ -329,8 +331,8 @@ int main(int argc, char* argv[]) {
     printf("Size of this list: %d\n", size(list1));
 
     printf("\n");
-    printf("Element number 2 of this list: %d\n", getByIndex(list1, 2, 'n'));
-    printf("Element number 5 of this list: %d\n", getByIndex(list1, 5, 'n'));
+    printf("Element number 2 of this list: %d\n", getByIndex(list1, 2, '0'));
+    printf("Element number 5 of this list: %d\n", getByIndex(list1, 5, '0'));
 
     printf("\n");
     printf("The index of number 170715: %d\n", getByValue(list1, 170715));
