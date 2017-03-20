@@ -1,14 +1,16 @@
 include("mergeInsertionSort.jl")
 include("quickInsertionSort.jl")
+include("quickMergeSort.jl")
 include("partialInsertionSort.jl")
 
 function getMessage()
-  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\tliczbaElementów:\n\t   mi ‒ połączenie sortowań: przez scalanie i przez wstawianie\n\t   qi ‒ połączenie sortowań: szybkiego i przez wstawianie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
+  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\tliczbaElementów:\n\t   mi ‒ połączenie sortowań: przez scalanie i przez wstawianie\n\t   qi ‒ połączenie sortowań: szybkiego i przez wstawianie\n\t   qm ‒ połączenie sortowań: szybkiego i przez scalanie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
 end
 
 type Data
   nA
   nC
+  nT
 end
 
 function sortDesc(A::Array{Int64})
@@ -35,8 +37,10 @@ end
 function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
   if s == "mi"
     algorithm = "mergeInsertionSort"
-  else
+  elseif s == "qi"
     algorithm = "quickInsertionSort"
+  else
+    algorithm = "quickMergeSort"
   end
   #time = Dates.format(now(), "yyyy-mm-dd_HH:MM:SS")
   i = 1; k = 100
@@ -64,6 +68,19 @@ function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
   #filename = string(algorithm, "_max_", n, "_", sequence, "_", time, ".png")
   filename = string(algorithm, "_max_", n, "_", sequence, ".png")
   run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'NUMBER OF ARRANGEMENTS / COMPARISONS'; plot '$filename2' pt 20 title 'comparisons', '$filename1' pt 60 title 'arrangements'; set output"`)
+  filenameT = string(algorithm, "_max_", n, "_", sequence, "_time.txt")
+  i = 1; k = 100
+  open(filenameT, "w") do f
+    while k <= n
+      t = arr[i].nT
+      write(f, "$k $t\n")
+      k += 100
+      i += 1
+    end
+  end
+  filename = string(algorithm, "_max_", n, "_", sequence, "_time.png")
+  run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'TIME [s]'; plot '$filenameT' pt 20 notitle"`)
+
 end
 
 function exec(n::Int64, algorithm::String, sequence::String)
@@ -75,23 +92,32 @@ function exec(n::Int64, algorithm::String, sequence::String)
   while k <= n
     avgA = 0
     avgC = 0
+    time = 0
     for i = 1 : max
       A = rand(1:100000, k)
       if sequence == "desc"
         sortDesc(A)
       end
+      
+      timeStart = Dates.datetime2unix(Dates.now())
       if algorithm == "mi"
         a, c = mergeInsertionSort(A)
-      else
+      elseif algorithm == "qi"
         a, c = quickInsertionSort(A)
+      else
+        a, c = quickMergeSort(A)
       end
+      timeEnd = Dates.datetime2unix(Dates.now())
+
+      time += timeEnd-timeStart
       avgA += a
       avgC += c
       isSorted(A)
     end
     avgA = div(avgA, max)
     avgC = div(avgC, max)
-    push!(r, Data(avgA, avgC))
+    avgTime = time/max
+    push!(r, Data(avgA, avgC, avgTime))
 
     j += 1
     k += 100
@@ -109,7 +135,7 @@ if length(ARGS) == 3
   if n != nothing
     if n < 100
       println("Błąd: minimalny rozmiar danych ‒ 100 elementów")
-    elseif ARGS[2] == "mi" || ARGS[2] == "qi"
+    elseif ARGS[2] == "mi" || ARGS[2] == "qi" || ARGS[2] == "qm"
       if ARGS[3] == "desc" || ARGS[3] == "rand"
         exec(n, ARGS[2], ARGS[3])
       else

@@ -9,6 +9,7 @@ end
 type Data
   nA
   nC
+  nT
 end
 
 function sortDesc(A::Array{Int64})
@@ -66,6 +67,18 @@ function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
   #filename = string(algorithm, "_max_", n, "_", sequence, "_", time, ".png")
   filename = string(algorithm, "_max_", n, "_", sequence, ".png")
   run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'NUMBER OF ARRANGEMENTS / COMPARISONS'; plot '$filename2' pt 20 title 'comparisons', '$filename1' pt 60 title 'arrangements'; set output"`)
+  filenameT = string(algorithm, "_max_", n, "_", sequence, "_time.txt")
+  i = 1; k = 100
+  open(filenameT, "w") do f
+    while k <= n
+      t = arr[i].nT
+      write(f, "$k $t\n")
+      k += 100
+      i += 1
+    end
+  end
+  filename = string(algorithm, "_max_", n, "_", sequence, "_time.png")
+  run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'TIME [s]'; plot '$filenameT' pt 20 notitle"`)
 end
 
 function exec(n::Int64, algorithm::String, sequence::String)
@@ -77,11 +90,14 @@ function exec(n::Int64, algorithm::String, sequence::String)
   while k <= n
     avgA = 0
     avgC = 0
+    time = 0
     for i = 1 : max
       A = rand(1:100000, k)
       if sequence == "desc"
         sortDesc(A)
       end
+
+      timeStart = Dates.datetime2unix(Dates.now())
       if algorithm == "i"
         a, c = insertionSort(A)
       elseif algorithm == "m"
@@ -89,13 +105,17 @@ function exec(n::Int64, algorithm::String, sequence::String)
       else
         a, c = quickSort(A)
       end
+      timeEnd = Dates.datetime2unix(Dates.now())
+
+      time += timeEnd-timeStart
       avgA += a
       avgC += c
       isSorted(A)
     end
     avgA = div(avgA, max)
     avgC = div(avgC, max)
-    push!(r, Data(avgA, avgC))
+    avgTime = time/max
+    push!(r, Data(avgA, avgC, avgTime))
 
     j += 1
     k += 100

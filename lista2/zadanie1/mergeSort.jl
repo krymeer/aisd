@@ -13,17 +13,17 @@ function merge(A::Array{Int64}, p::Int64, q::Int64, r::Int64)
     j += 1
   end
 
-  # println("MIS: scalenie dwóch tablic o długości ", q-p+1, " i ", r-q)
+  # println("MS: scalenie dwóch tablic o długości ", q-p+1, " i ", r-q)
 
   i = 1; j = m+1; k = p
   while i <= m && j <= l
-    # println("MIS: porównanie T[", i, "] = ", T[i] ," i T[", j, "] = ", T[j])
+    # println("MS: porównanie T[", i, "] = ", T[i] ," i T[", j, "] = ", T[j])
     if T[i] <= T[j]
-      # println("MIS: A[", k, "] = T[", i, "] = ", T[i])
+      # println("MS: A[", k, "] = T[", i, "] = ", T[i])
       A[k] = T[i]
       i += 1
     else
-      # println("MIS: A[", k, "] = T[", j, "] = ", T[j])
+      # println("MS: A[", k, "] = T[", j, "] = ", T[j])
       A[k] = T[j]
       j += 1
       numA += 1
@@ -33,11 +33,11 @@ function merge(A::Array{Int64}, p::Int64, q::Int64, r::Int64)
   end
 
   while i <= m    # jeśli pozostały jakieś elementy w I części podtablicy
-    # println("MIS: A[", k, "] = T[", i, "] = ", T[i])    
+    # println("MS: A[", k, "] = T[", i, "] = ", T[i])    
     A[k] = T[i]
     i += 1
     k += 1
-    numA += 1
+  #  numA += 1
   end
   return numA, numC
 end
