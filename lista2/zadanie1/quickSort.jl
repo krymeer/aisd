@@ -5,26 +5,40 @@ function swap(A::Array{Int64}, i::Int64, j::Int64)
 end
 
 function partition(A::Array{Int64}, a::Int64, b::Int64)
-  numA = 0; numC = 0
+  numA = 0; numC = 0; n = length(A)
   mid = div((a+b), 2)
   x = A[mid]              # pivot ‒ element środkowy tablicy
   swap(A, mid, b)
-  # println("QS: pivot = A[", mid, "] = ", x, "\nQS: długość tablicy: ", b-a+1)
-  numA += 1
+
+  if n <= 25
+    println("QS: pivot = A[", mid, "] = ", x, "\nQS: długość tablicy: ", b-a+1)
+  end
+
   i = a
   for j = a : b-1
     numC += 1
-    # println("QS: porównanie A[", j, "] = ", A[j], " i A[", b, "] = ", x)
+
+    if n <= 25
+      println("QS: porównanie A[", j, "] = ", A[j], " i A[", b, "] = ", x)
+    end
+
     if A[j] < x
       if i != j
         swap(A, i, j)
-        # println("QS: A[", i, "] <-> A[", j, "]")
         numA += 1
+
+        if n <= 25
+          println("QS: A[", i, "] <-> A[", j, "]")
+        end
       end
       i += 1
     end
   end
-  # println("QS: A[", i, "] <-> A[", b, "]")
+
+  if n <= 25
+    println("QS: A[", i, "] <-> A[", b, "]")
+  end
+
   swap(A, i, b)
   numA += 1
   return numA, numC, i

@@ -89,40 +89,56 @@ function exec(n::Int64, algorithm::String, sequence::String)
   j = 1
   max = 10
 
-  while k <= n
-    avgA = 0
-    avgC = 0
-    time = 0
-    for i = 1 : max
-      A = rand(1:100000, k)
-      if sequence == "desc"
-        sortDesc(A)
-      end
-      
-      timeStart = Dates.datetime2unix(Dates.now())
-      if algorithm == "mi"
-        a, c = mergeInsertionSort(A)
-      elseif algorithm == "qi"
-        a, c = quickInsertionSort(A)
-      else
-        a, c = quickMergeSort(A)
-      end
-      timeEnd = Dates.datetime2unix(Dates.now())
-
-      time += timeEnd-timeStart
-      avgA += a
-      avgC += c
-      isSorted(A)
+  if n <= 100
+    A = rand(1:100000, n)
+    if sequence == "desc"
+      sortDesc(A)
     end
-    avgA = div(avgA, max)
-    avgC = div(avgC, max)
-    avgTime = time/max
-    push!(r, Data(avgA, avgC, avgTime))
+    if algorithm == "mi"
+      mergeInsertionSort(A)
+    elseif algorithm == "qi"
+      quickInsertionSort(A)
+    else
+      quickMergeSort(A)
+    end
+    isSorted(A)
+    println("\n", A)
+  else
+    while k <= n
+      avgA = 0
+      avgC = 0
+      time = 0
+      for i = 1 : max
+        A = rand(1:100000, k)
+        if sequence == "desc"
+          sortDesc(A)
+        end
+        
+        timeStart = Dates.datetime2unix(Dates.now())
+        if algorithm == "mi"
+          a, c = mergeInsertionSort(A)
+        elseif algorithm == "qi"
+          a, c = quickInsertionSort(A)
+        else
+          a, c = quickMergeSort(A)
+        end
+        timeEnd = Dates.datetime2unix(Dates.now())
 
-    j += 1
-    k += 100
+        time += timeEnd-timeStart
+        avgA += a
+        avgC += c
+        isSorted(A)
+      end
+      avgA = div(avgA, max)
+      avgC = div(avgC, max)
+      avgTime = time/max
+      push!(r, Data(avgA, avgC, avgTime))
+
+      j += 1
+      k += 100
+    end
+    plot(algorithm, r, n, sequence)
   end
-  plot(algorithm, r, n, sequence)
 end
 
 println()
@@ -133,8 +149,8 @@ if length(ARGS) == 3
     getMessage()
   end
   if n != nothing
-    if n < 100
-      println("Błąd: minimalny rozmiar danych ‒ 100 elementów")
+    if n < 5
+      println("Błąd: minimalny rozmiar danych ‒ 5 elementów")
     elseif ARGS[2] == "mi" || ARGS[2] == "qi" || ARGS[2] == "qm"
       if ARGS[3] == "desc" || ARGS[3] == "rand"
         exec(n, ARGS[2], ARGS[3])
