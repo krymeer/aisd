@@ -1,4 +1,6 @@
 *.out
 *.pdf
+*.txt
+*.png
 /c/*
 /old/*
