@@ -1,16 +1,19 @@
-include("mergeInsertionSort.jl")
-include("quickInsertionSort.jl")
-include("quickMergeSort.jl")
-include("partialInsertionSort.jl")
+include("radixSort.jl")
 
 function getMessage()
-  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\talgorytmSortowania:\n\t   mi ‒ połączenie sortowań: przez scalanie i przez wstawianie\n\t   qi ‒ połączenie sortowań: szybkiego i przez wstawianie\n\t   qm ‒ połączenie sortowań: szybkiego i przez scalanie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
+  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\talgorytmSortowania:\n\t   x ‒ radix sort\n\t   r ‒ randomized-select\n\t   s ‒ select\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
 end
 
 type Data
   nA
   nC
   nT
+end
+
+function swap(A::Array{Int64}, i::Int64, j::Int64)
+  tmp = A[i]
+  A[i] = A[j]
+  A[j] = tmp
 end
 
 function sortDesc(A::Array{Int64})
@@ -35,17 +38,15 @@ function isSorted(A::Array{Int64})
 end
 
 function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
-  if s == "mi"
-    algorithm = "mergeInsertionSort"
-  elseif s == "qi"
-    algorithm = "quickInsertionSort"
+  if s == "x"
+    algorithm = "radixSort"
+  elseif s == "r"
+    algorithm = "randomizedSelect"
   else
-    algorithm = "quickMergeSort"
+    algorithm = "select"
   end
-  #time = Dates.format(now(), "yyyy-mm-dd_HH:MM:SS")
   i = 1; k = 100
   filename1 = string(algorithm, "_max_", n, "_arr_", sequence, ".txt")
-  #filename1 = string(algorithm, "_max_", n, "_arr_", time, ".txt")
   open(filename1, "w") do f
     while k <= n
       na = arr[i].nA
@@ -56,7 +57,6 @@ function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
   end
   i = 1; k = 100
   filename2 = string(algorithm, "_max_", n, "_comp_", sequence, ".txt")
-  #filename2 = string(algorithm, "_max_", n, "_comp_", time, ".txt")
   open(filename2, "w") do f
     while k <= n
       nc = arr[i].nC
@@ -65,9 +65,12 @@ function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
       i += 1
     end
   end
-  #filename = string(algorithm, "_max_", n, "_", sequence, "_", time, ".png")
   filename = string(algorithm, "_max_", n, "_", sequence, ".png")
-  run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'NUMBER OF ARRANGEMENTS / COMPARISONS'; plot '$filename2' pt 20 title 'comparisons', '$filename1' pt 60 title 'arrangements'; set output"`)
+  if s == "x"
+    run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'NUMBER OF ARRANGEMENTS'; plot '$filename1' pt 60 notitle; set output"`)
+  else
+    run(`gnuplot -e "set term png; set output '$filename'; set xlabel 'SIZE OF DATA'; set ylabel 'NUMBER OF ARRANGEMENTS / COMPARISONS'; plot '$filename2' pt 20 title 'comparisons', '$filename1' pt 60 title 'arrangements'; set output"`)
+  end
   filenameT = string(algorithm, "_max_", n, "_", sequence, "_time.txt")
   i = 1; k = 100
   open(filenameT, "w") do f
@@ -94,12 +97,12 @@ function exec(n::Int64, algorithm::String, sequence::String)
     if sequence == "desc"
       sortDesc(A)
     end
-    if algorithm == "mi"
-      mergeInsertionSort(A)
-    elseif algorithm == "qi"
-      quickInsertionSort(A)
+    if algorithm == "x"
+      a, A = radixSort(A)
+    elseif algorithm == "r"
+      # randomizedSelect(A)
     else
-      quickMergeSort(A)
+      # select(A)
     end
     isSorted(A)
     println("\n", A)
@@ -115,12 +118,13 @@ function exec(n::Int64, algorithm::String, sequence::String)
         end
         
         timeStart = Dates.datetime2unix(Dates.now())
-        if algorithm == "mi"
-          a, c = mergeInsertionSort(A)
-        elseif algorithm == "qi"
-          a, c = quickInsertionSort(A)
+        if algorithm == "x"
+          a, A = radixSort(A)
+          c = 0
+        elseif algorithm == "r"
+          #a, c = randomizedSelect(A)
         else
-          a, c = quickMergeSort(A)
+         # a, c = selec(A)
         end
         timeEnd = Dates.datetime2unix(Dates.now())
 
@@ -151,7 +155,7 @@ if length(ARGS) == 3
   if n != nothing
     if n < 5
       println("Błąd: minimalny rozmiar danych ‒ 5 elementów")
-    elseif ARGS[2] == "mi" || ARGS[2] == "qi" || ARGS[2] == "qm"
+    elseif ARGS[2] == "x" || ARGS[2] == "r" || ARGS[2] == "s"
       if ARGS[3] == "desc" || ARGS[3] == "rand"
         exec(n, ARGS[2], ARGS[3])
       else

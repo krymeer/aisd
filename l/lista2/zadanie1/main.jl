@@ -3,7 +3,7 @@ include("mergeSort.jl")
 include("quickSort.jl")
 
 function getMessage()
-  println("Użycie:\n\n\tzadanie1.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\tliczbaElementów:\n\t   i ‒ sortowanie przez wstawianie\n\t   m ‒ sortowanie przez scalanie\n\t   q ‒ sortowanie szybkie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
+  println("Użycie:\n\n\tzadanie1.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\talgorytmSortowania:\n\t   i ‒ sortowanie przez wstawianie\n\t   m ‒ sortowanie przez scalanie\n\t   q ‒ sortowanie szybkie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
 end
 
 type Data
