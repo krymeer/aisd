@@ -1,10 +1,11 @@
+include("dualPivotQuicksort.jl")
 include("mergeInsertionSort.jl")
 include("quickInsertionSort.jl")
 include("quickMergeSort.jl")
 include("partialInsertionSort.jl")
 
 function getMessage()
-  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\talgorytmSortowania:\n\t   mi ‒ połączenie sortowań: przez scalanie i przez wstawianie\n\t   qi ‒ połączenie sortowań: szybkiego i przez wstawianie\n\t   qm ‒ połączenie sortowań: szybkiego i przez scalanie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
+  println("Użycie:\n\n\tzadanie2.jl liczbaElementów algorytmSortowania typDanychWejściowych\n\n\talgorytmSortowania:\n\t   d ‒ dual-pivot quicksort Yaroslavskiy'ego\n\t   mi ‒ połączenie sortowań: przez scalanie i przez wstawianie\n\t   qi ‒ połączenie sortowań: szybkiego i przez wstawianie\n\t   qm ‒ połączenie sortowań: szybkiego i przez scalanie\n\n\ttypDanychWejściowych:\n\t   desc ‒ ciąg posortowany malejąco\n\t   rand ‒ losowy ciąg")
 end
 
 type Data
@@ -35,7 +36,9 @@ function isSorted(A::Array{Int64})
 end
 
 function plot(s::String, arr::Array{Data,1}, n::Int64, sequence::String)
-  if s == "mi"
+  if s == "d"
+    algorithm = "dualPivotQuicksort"  
+  elseif s == "mi"
     algorithm = "mergeInsertionSort"
   elseif s == "qi"
     algorithm = "quickInsertionSort"
@@ -94,7 +97,9 @@ function exec(n::Int64, algorithm::String, sequence::String)
     if sequence == "desc"
       sortDesc(A)
     end
-    if algorithm == "mi"
+    if algorithm == "d"
+      dualPivotQuicksort(A)
+    elseif algorithm == "mi"
       mergeInsertionSort(A)
     elseif algorithm == "qi"
       quickInsertionSort(A)
@@ -115,7 +120,9 @@ function exec(n::Int64, algorithm::String, sequence::String)
         end
         
         timeStart = Dates.datetime2unix(Dates.now())
-        if algorithm == "mi"
+        if algorithm == "d"
+          a, c = dualPivotQuicksort(A)        
+        elseif algorithm == "mi"
           a, c = mergeInsertionSort(A)
         elseif algorithm == "qi"
           a, c = quickInsertionSort(A)
@@ -151,7 +158,7 @@ if length(ARGS) == 3
   if n != nothing
     if n < 5
       println("Błąd: minimalny rozmiar danych ‒ 5 elementów")
-    elseif ARGS[2] == "mi" || ARGS[2] == "qi" || ARGS[2] == "qm"
+    elseif  ARGS[2] == "d" || ARGS[2] == "mi" || ARGS[2] == "qi" || ARGS[2] == "qm"
       if ARGS[3] == "desc" || ARGS[3] == "rand"
         exec(n, ARGS[2], ARGS[3])
       else
