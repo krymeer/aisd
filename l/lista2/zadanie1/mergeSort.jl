@@ -51,6 +51,17 @@ function merge(A::Array{Int64}, p::Int64, q::Int64, r::Int64)
     A[k] = T[i]
     i += 1
     k += 1
+    numA += 1
+  end
+
+  while j <= l    # jeśli pozostały jakieś elementy w II części podtablicy
+    if n <= 25
+      println("MS: A[", k, "] = T[", j, "] = ", T[j])    
+    end
+
+    A[k] = T[j]
+    j += 1
+    k += 1
   end
   return numA, numC
 end
