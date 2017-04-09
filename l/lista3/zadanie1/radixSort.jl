@@ -17,10 +17,6 @@ function countingSort(A::Array{String,1}, n::Int64, d::Int64, r::Int64)
     C[number+1] += 1
   end
 
-  if n <= 25
-    #println("CS: liczb mających bit '0' na ", d, ". cyfrze od końca: ", C[1], ", '1' - ", C[2])
-  end
-
   for i = 1 : k
     C[i+1] += C[i]
   end
@@ -34,7 +30,7 @@ function countingSort(A::Array{String,1}, n::Int64, d::Int64, r::Int64)
     B[C[number+1]] = A[j]
 
     if n <= 25
-      #println("CS: B[", C[digit+1], "] = A[", j, "] = ", A[j], " = ", toInt(A[j]))
+      println("CS: B[", C[number+1], "] = A[", j, "] = ", A[j], " = ", toInt(A[j]))
     end
     if B[j] != A[j]
       numA += 1
@@ -67,7 +63,7 @@ function radixSort(A::Array{Int64,1})
   for i = b : -r : 1                      # każda cyfra liczby b-bitowej ma r bitów
 
     if n <= 25
-      #println("RS: sortowanie liczb po ", i, ". cyfrze od końca")
+      println("RS: sortowanie liczb po ", i, ". cyfrze od końca")
     end
 
     a, S = countingSort(S, n, i, r)
