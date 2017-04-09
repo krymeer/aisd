@@ -9,6 +9,14 @@ function toBinaryString(n::Int64)
   return bitString
 end
 
+function biggestNumber(n::Int64)
+  result = 0
+  for i = 0 : n-1
+    result += 2^i
+  end
+  return result
+end
+
 function getMaximumNumberOfDigits(A::Array{Int64,1})
   n = length(A)
   max = A[1]
