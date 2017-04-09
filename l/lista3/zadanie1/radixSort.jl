@@ -11,8 +11,14 @@ function countingSort(A::Array{String,1}, n::Int64, d::Int64, r::Int64)
   for j = 1 : n
     if d-r+1 < 1
       number = toInt(A[j][1:d])     # ilość bitów [liczby w systemie binarnym], z jakich będzie się składać jedna "cyfra"
+      if n <= 25
+        println("CS: bity od 1 do ", d, " liczby A[", j, "]: = \"", A[j][1:d], "\"")
+      end
     else
       number = toInt(A[j][d-r+1:d])
+      if n <= 25
+        println("CS: bity od ", d-r+1, " do ", d, " liczby A[", j, "]: = \"", A[j][d-r+1:d], "\"")
+      end
     end
     C[number+1] += 1
   end
