@@ -1,0 +1,134 @@
+\documentclass[a4paper,8pt]{article}
+\usepackage{geometry}
+ \geometry{
+  a4paper,
+  total={160mm,247mm},
+  left=2.5mm,
+  top=2.5mm,
+  bottom=2.5mm,
+  right=2.5mm
+ }
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol, amsmath, amsfonts, tikz, lipsum, wrapfig, lipsum, mathtools, algorithm2e}
+\usepackage[pscoord]{eso-pic}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usetikzlibrary{automata,positioning}
+\setlength{\intextsep}{0pt}
+\newcommand\tab[1][0.5cm]{\hspace*{#1}}
+\newcommand*{\lineCode}{\fontfamily{cmtt}\selectfont}
+
+\pagestyle{empty}
+\setlength\parindent{0pt}
+\SetKw{KwAnd}{and}
+
+\begin{document}
+
+\begin{multicols}{3}
+
+
+{\SetAlgoNoLine
+  \begin{algorithm*}[H] \small{
+  \underline{\textbf{Insertion sort -- $\boldsymbol{O(n^2)}$}}\\
+    \For{$i \leftarrow 2 $ \KwTo $n$} {
+      $key \leftarrow A[i]$\;
+      $j \leftarrow i-1$\;
+      \While{$key < A[j]$ \KwAnd $j > 0$} {
+        $A[j+1] \leftarrow A[j]$\;
+        $j \leftarrow j-1$\;
+      }
+      $A[j+1] \leftarrow key$\;
+    }
+  }\end{algorithm*}
+}
+
+{\SetAlgoNoLine
+  \begin{algorithm*}[H] \small{
+    \underline{\textbf{Quicksort(A, p, r)  -- $\boldsymbol{O(n\log{n})/O(n^2)}$}}\\
+    \If {$r>p$} {
+      $q \leftarrow partition(A, p, r)$\;
+      Quicksort($A, p, q-1$)\;
+      Quicksort($A, q+1, r$)\;
+    }
+  }\end{algorithm*}
+}
+
+{\SetAlgoNoLine
+  \begin{algorithm*}[H] \small{
+    \underline{\textbf{partition(A, p, r)}}\\
+    $x \leftarrow A[r]$\;
+    $i \leftarrow p-1$\;
+    \For{$j\leftarrow p$ \KwTo $r-1$}{
+      \If {$A[j] \le x$} {
+        $i \leftarrow i+1$\;
+        $A[i] \leftrightarrow A[j]$\;      
+      }
+    }
+    $A[i+1] \leftrightarrow A[r]$\;
+    \KwRet{$i+1$}\;
+  }\end{algorithm*}
+}
+
+{\SetAlgoNoLine
+  \begin{algorithm*}[H] \small{
+  \underline{\textbf{MergeSort(A, p, r) -- $\boldsymbol{O(n\log{n})}$}}\\
+    \If{r > p}{
+      $q \leftarrow \floor{\frac{p+r}{2}}$\;
+      MergeSort($A, p, q$)\;
+      MergeSort($A, q+1, r$)\;
+      merge($A, p, q, r$)\;
+    }
+  }\end{algorithm*}
+}
+
+{\SetAlgoNoLine
+  \begin{algorithm*}[H] \small{
+    \underline{\textbf{merge(A, p, q, r)}}\\
+    utwórz pomocniczą tablicę $T$\;
+    \For{$i \leftarrow p $ \KwTo $r$}{
+      $T[i] \leftarrow A[i]$\;
+    }
+
+    $i \leftarrow p$\;
+    $j \leftarrow q+1$\;
+    $k \leftarrow p$\;
+
+    \While{$i \le q$ \KwAnd $j \le r$} {
+      \uIf{$T[i] \le T[j]$} {
+        $A[k] \leftarrow T[i]$\;
+        $i \leftarrow i+1$\;
+      }
+      \Else {
+        $A[k] \leftarrow T[j]$\;
+        $j \leftarrow j+1$\;
+      }
+      $k \leftarrow k+1$\;
+    }
+    \While{$i \le q$} {
+      $A[k] \leftarrow T[i]$\;
+      $i \leftarrow i+1$\;
+      $k \leftarrow k+1$\;
+    }
+    \While{$j \le r$} {
+      $A[k] \leftarrow T[j]$\;
+      $j \leftarrow j+1$\;
+      $k \leftarrow k+1$\;
+    }
+
+  }\end{algorithm*}
+}
+
+
+\end{multicols}
+
+
+
+%\placetextbox{0.775}{0.995}{\fbox{{\fontsize{32pt}{2.5cm}%\textbf{Krzysztof Osada}}}}
+
+
+
+
+\end{document}
+
