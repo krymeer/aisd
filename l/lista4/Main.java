@@ -38,7 +38,7 @@ public class Main {
           } else if (line.contains("find")) {
             line = line.replace("find", "").trim();
             try {
-              tree.find(Integer.parseInt(line));
+              tree.find(Integer.parseInt(line), true);
             } catch (NumberFormatException e) {
               System.err.println("\nBłąd: \"" + line + "\" nie jest liczbą całkowitą\n");
               System.exit(0);

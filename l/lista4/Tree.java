@@ -1,5 +1,6 @@
 public class Tree {
   Node root;
+  int numberOfComparisons;
 
   public void insert(int value) {
     if (this.root == null) {
@@ -59,6 +60,19 @@ public class Tree {
       }
       if (y != node) {
         node.value = y.value;                 // W miejsce zwolnionego węzła należy wstawić odpowiednią wartość
+      }
+    }
+  }
+
+  public static int height(Node node) {
+    if (node == null) {
+      return -1;
+    } else {
+      int leftH = height(node.left), rightH = height(node.right);
+      if (leftH >= rightH) {
+        return leftH+1;
+      } else {
+        return rightH+1;
       }
     }
   }
@@ -123,11 +137,14 @@ public class Tree {
     System.out.println(node.value);
   }
 
-  public void find(int value) {
+  public void find(int value, boolean prints) {
     Node node = this.root;
     while (node != null) {
+      numberOfComparisons++;
       if (node.value == value) {
-        System.out.println(1);
+        if (prints) {
+          System.out.println(1);
+        }
         return;
       } else if (value > node.value) {
         node = node.right;
@@ -135,6 +152,8 @@ public class Tree {
         node = node.left;
       }
     }
-    System.out.println(0);
+    if (prints) {
+      System.out.println(0);
+    }
   }
 }
