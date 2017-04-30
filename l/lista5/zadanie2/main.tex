@@ -1,0 +1,93 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{geometry}
+ \geometry{
+  a4paper,
+  total={160mm,247mm},
+  left=25mm,
+  top=25mm,
+ }
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, graphicx, algorithm2e, fancyhdr, color, lipsum, setspace}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Krzysztof Radosław Osada}
+\rhead{221440}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+
+\newcommand*{\lineCode}{\fontfamily{cmtt}\selectfont}
+\newcommand{\lineCodeBold}{\fontfamily{pcr}\bfseries}
+\definecolor{Gray}{gray}{0.9}
+
+\onehalfspacing
+\frenchspacing
+\author{Krzysztof Radosław Osada}
+\title{\textbf{\Huge{Algorytmy i struktury danych}}\\[3pt] Longest Common Subsequence -- najdłuższy wspólny podciąg}
+\begin{document}
+  \singlespacing
+    \maketitle\thispagestyle{empty}
+  \onehalfspacing
+  \section{Przykład}
+  Weźmy słowa KARTKA i KOTKA oraz wypełnijmy dla nich tablicę wykorzystywaną przez funkcję {\lineCode LCSlength}:
+  \begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    & $\phi$ & K & A & R & T & K & A \\ \hline
+    $\phi$ & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    K & 0 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+    O & 0 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+    T & 0 & 1 & 1 & 1 & 2 & 2 & 2 \\ \hline
+    K & 0 & 1 & 1 & 1 & 2 & 3 & 3  \\ \hline
+    A & 0 & 1 & 2 & 2 & 2 & 3 & 4  \\ \hline
+
+  \end{tabular}
+  \end{table}
+
+  Najdłuższy wspólny podciąg wyrazów KARTKA i KOTKA ma długość \textbf{4}. Wykonując zaimplementowany algorytm {\lineCode getLCS} bądź ,,idąc'' po elementach tabeli, otrzymamy wspólny podciąg KTKA. Sekwencja operacji jest zbliżona do poniższej:
+
+  \begin{equation*}
+    \boldsymbol{A} \nwarrow \boldsymbol{K} \nwarrow \boldsymbol{T} \nwarrow R/T \uparrow O/R \uparrow K/R \leftarrow A/R \leftarrow \boldsymbol{K} \Rightarrow \boldsymbol{KTKA}
+  \end{equation*}
+
+  *) Operatory $\uparrow$, $\leftarrow$, $\nwarrow$ oznaczają kolejno przejście w górę, w lewo lub na ukos po elementach w wyznaczonej tabeli najdłuższych podciągów; ponadto funkcja {\lineCode getLCS} odwraca ciąg, ponieważ jego elementy znajdowane są w kolejności od ostatniego do pierwszego.
+
+  \section{Złożoność obliczeniowa}Funkcja {\lineCode LCSlength} została przetestowana na ciągach $m$ i $n$-elementowych składających się z losowych liter alfabetu łacińskiego. Przy każdym wywołaniu obliczana była ilość porównań między elementami danych wejściowych, co pozwoliło na uzyskanie następujących rezultatów:
+
+  \begin{table}[ht]
+  \centering
+  \begin{tabular}{p{1.5cm}p{1.5cm}p{1.5cm}p{2cm}p{3cm}}
+    \multicolumn{1}{c}{$m$} & \multicolumn{1}{c}{$n$} & \multicolumn{1}{c}{$m+n$} & \multicolumn{1}{c}{$m\cdot n$} & liczba porównań\\ \hline
+    20 & 25 & 45 & 500 & 500\\
+    1020 & 1025 & 2045 & 1045500 & 1045500\\
+    2020 & 2025 & 4045 & 4090500 & 4090500\\
+    3020 & 3025 & 6045 & 9135500 & 9135500\\
+    4020 & 4025 & 8045 & 16180500 &16180500\\
+    5020 & 5025 & 10045 & 25225500 & 25225500\\
+  \end{tabular}
+  \end{table}
+  \begin{table}[ht]
+  \centering
+  \begin{tabular}{p{1.5cm}p{1.5cm}p{1.5cm}p{2cm}p{3cm}}
+    6020 & 6025 & 12045 & 36270500 & 36270500\\
+    7020 & 7025 & 14045 & 49315500 & 49315500\\
+    8020 & 8025 & 16045 & 64360500 & 64360500\\
+    9020 & 9025 & 18045 & 81405500 & 81405500\\
+    10020 & 10025 & 20045 & 100450500 & 100450500\\
+    11020 & 11025 & 22045 & 121495500 & 121495500\\
+    12020 & 12025 & 24045 & 144540500 & 144540500\\
+    13020 & 13025 & 26045 & 169585500 & 169585500\\
+    14020 & 14025 & 28045 & 196630500 & 196630500\\
+    15020 & 15025 & 30045 & 225675500 & 225675500\\
+    16020 & 16025 & 32045 & 256720500 & 256720500\\
+    17020 & 17025 & 34045 & 289765500 & 289765500\\
+    18020 & 18025 & 36045 & 324810500 & 324810500\\
+    19020 & 19025 & 38045 & 361855500 & 361855500\\
+    20020 & 20025 & 40045 & 400900500 & 400900500\\
+  \end{tabular}
+  \end{table}
+  Jak widać, liczba porównań bezpośrednio zależy od zmiennych $m$ i $n$, czyli długości porównywanych ze sobą słów, ciągów, tablic liczbowych i tym podobnych. Mamy więc złożoność obliczeniową $\boldsymbol{\Theta(m\cdot n)}$.
+\end{document}
