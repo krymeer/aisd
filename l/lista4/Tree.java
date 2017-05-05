@@ -44,19 +44,19 @@ public class Tree {
         y = minNode(node.right);              // Następnik znajduje się w prawym poddrzewie
       }
       if (y.left != null) {
-        x = y.left;                           // Element posiada tylko lewego syna
+        x = y.left;                           // Element posiada lewego syna (czyli nie jest następnikiem node'a)
       } else {
-        x = y.right;                          // Element posiada albo tylko prawego syna, albo obydwu, albo żadnego
+        x = y.right;                          // Element posiada albo tylko prawego syna, albo żadnego
       }
       if (x != null) {
-        x.parent = y.parent;                  // Przepięcie wskaźnika
+        x.parent = y.parent;                  // Przepięcie wskaźnika: element wstawiany ma tego samego rodzica co usuwany
       }
       if (y.parent == null) {
         this.root = x;                        // Następnik (syn) staje się korzeniem drzewa
       } else if (y == y.parent.left) {
-        y.parent.left = x;                    // Usuwany węzeł był lewym synem
+        y.parent.left = x;                    // Usuwany węzeł (lub przestawiany następnik) był lewym synem
       } else {
-        y.parent.right = x;                   // Usuwany węzeł był prawym synem
+        y.parent.right = x;                   // Usuwany węzeł (lub przestawiany następnik) był prawym synem
       }
       if (y != node) {
         node.value = y.value;                 // W miejsce zwolnionego węzła należy wstawić odpowiednią wartość
