@@ -14,11 +14,13 @@ function printHeap(H::Array{Int64,1})
 end
 
 function bubbleUp(H::Array{Int64,1}, index::Int64)
+  numberOfComparisons = 0
   if index > 1
     p = parent(index)
     if H[p] > H[index] && index > 1
       swap(H, p, index)
-      bubbleUp(H, p)
+      numberOfComparisons += 1 + bubbleUp(H, p)
     end
   end
+  return numberOfComparisons
 end

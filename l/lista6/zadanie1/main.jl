@@ -23,9 +23,9 @@ printHeap(A)
 
 decreaseKey(A, 100, 20)
 decreaseKey(A, 1, 16)
-decreaseKey(A, 8, 6)
 
 println("\ndecreaseKey na 8. elemencie kolejki (", A[8], "):")
+decreaseKey(A, 8, 6)
 printHeap(A)
 
 println("\nPobranie z kolejki najmniejszego elementu (", A[1], "):")

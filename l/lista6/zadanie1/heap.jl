@@ -21,14 +21,17 @@ function Heap()
 end
 
 function insert(H::Array{Int64,1}, value::Int64)
+  numberOfComparisons = 0
   append!(H, value)
   i = length(H)
   p = parent(i)
   while i > 1 && H[p] > H[i]
+    numberOfComparisons += 1
     swap(H, p, i)
     i = p
     p = parent(i)
   end
+  return numberOfComparisons
 end
 
 function decreaseKey(H::Array{Int64,1}, i::Int64, newKey::Int64)
@@ -38,7 +41,7 @@ function decreaseKey(H::Array{Int64,1}, i::Int64, newKey::Int64)
     println("\nBłąd: nowy klucz - ", newKey, " - nie jest mniejszy od bieżącego - ", H[i])
   else
     H[i] = newKey
-    bubbleUp(H, i)
+    return bubbleUp(H, i)
   end
 end
 
@@ -50,28 +53,34 @@ function extractMin(H::Array{Int64,1})
     smallest = H[1]
     H[1] = H[len]
     deleteat!(H, len)
-    heapify(H, 1)
-    return smallest
+    numberOfComparisons = heapify(H, 1)
+    return smallest, numberOfComparisons
   end
 end
 
 function heapify(H::Array{Int64,1}, i::Int64)
+  numberOfComparisons = 0
+
   l = left(i)
   r = right(i)
   smallest = i
 
   if l <= length(H) && H[l] < H[i]
     smallest = l
+    numberOfComparisons += 1
   end
 
   if r <= length(H) && H[r] < H[smallest]
     smallest = r
+    numberOfComparisons += 1
   end
 
   if smallest != i
     swap(H, i, smallest)
-    heapify(H, smallest)
+    numberOfComparisons += 1 + heapify(H, smallest)
   end
+
+  return numberOfComparisons
 end
 
 function buildHeap(H::Array{Int64,1})
