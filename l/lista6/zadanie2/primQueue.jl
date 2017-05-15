@@ -1,29 +1,17 @@
 # Autor: Krzysztof Osada, 2017
 
-type Queue
+type primQueue
   id::Int64
   cost::Float64
 end
 
-function swapVertexes(Q::Array{Queue,1}, i::Int64, j::Int64)
+function swapVertexes(Q::Array{primQueue,1}, i::Int64, j::Int64)
   tmp = Q[i]
   Q[i] = Q[j]
   Q[j] = tmp
 end
 
-function parent(i)
-  return i >> 1
-end
-
-function left(i)
-  return i << 1
-end
-
-function right(i)
-  return 1 + i << 1
-end
-
-function bubbleUp(Q::Array{Queue,1}, index::Int64)
+function bubbleUp(Q::Array{primQueue,1}, index::Int64)
   if index > 1
     p = parent(index)
     if Q[p].cost > Q[index].cost && index > 1
@@ -35,9 +23,9 @@ end
 
 function makeQueue(V::Array{Int64,1}, cost::Array{Float64,1})
   n = length(V)
-  Q = Queue[]
+  Q = primQueue[]
   for i = 1 : n
-    push!(Q, Queue(V[i], cost[i]))
+    push!(Q, primQueue(V[i], cost[i]))
   end
 
   for i = div(n, 2) : -1 : 1
@@ -46,7 +34,7 @@ function makeQueue(V::Array{Int64,1}, cost::Array{Float64,1})
   return Q
 end
 
-function heapify(Q::Array{Queue,1}, i::Int64)
+function heapify(Q::Array{primQueue,1}, i::Int64)
   l = left(i)
   r = right(i)
   smallest = i
@@ -66,7 +54,7 @@ function heapify(Q::Array{Queue,1}, i::Int64)
   end
 end
 
-function extractMin(Q::Array{Queue,1})
+function extractMin(Q::Array{primQueue,1})
   len = length(Q)
   if len == 0
     println("\nBłąd: kolejka jest pusta")
@@ -79,7 +67,7 @@ function extractMin(Q::Array{Queue,1})
   end
 end
 
-function isInQ(Q::Array{Queue,1}, u::Int64)
+function isInQ(Q::Array{primQueue,1}, u::Int64)
   for i = 1 : length(Q)
     if Q[i].id == u
       return i
@@ -88,7 +76,7 @@ function isInQ(Q::Array{Queue,1}, u::Int64)
   return -1
 end
 
-function decreaseKey(Q::Array{Queue,1}, i::Int64, newCost::Float64)
+function decreaseKey(Q::Array{primQueue,1}, i::Int64, newCost::Float64)
   if i > length(Q)
     println("\nBłąd: w kolejce nie istnieje element o indeksie ", i)
   elseif Q[i].cost < newCost

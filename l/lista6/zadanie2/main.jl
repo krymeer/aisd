@@ -4,6 +4,7 @@ include("graph.jl")
 include("fileHandling.jl")
 include("appendix.jl")
 include("prim.jl")
+include("kruskal.jl")
 
 if typeof(STDIN) != IOStream
   helloMessage()
@@ -17,8 +18,7 @@ else
     if (ARGS[1] == "prim")
       prim(V, E)
     else
-      println(V)
-      println(E)
+      kruskal(V, E)
     end
   end
 end

@@ -16,7 +16,7 @@ function prim(V::Array{Int64,1}, E::Array{Edge,1})
   v0 = rand(V)                                    # losowy wierzchołek grafu
   cost[v0] = 0                                    # pierwszy wierzchołek znajdujący się w drzewie
 
-  Q = makeQueue(V, cost)   # kolejka priorytetowa (po kosztach podróży)
+  Q = makeQueue(V, cost)                          # kolejka priorytetowa (po kosztach podróży)
   sizeOfQ = length(Q)
 
   matrix = adjacencyMatrix(numberOfVertexes, E)   # macierz sąsiedztwa
