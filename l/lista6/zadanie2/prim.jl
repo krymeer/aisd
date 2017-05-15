@@ -20,7 +20,6 @@ function prim(V::Array{Int64,1}, E::Array{Edge,1})
   sizeOfQ = length(Q)
 
   matrix = adjacencyMatrix(numberOfVertexes, E)   # macierz sąsiedztwa
-
   T = Int64[]                                     # kolejność wierzchołków w drzewie
 
   while sizeOfQ > 0
