@@ -20,21 +20,22 @@ function prim(V::Array{Int64,1}, E::Array{Edge,1})
   sizeOfQ = length(Q)
 
   matrix = adjacencyMatrix(numberOfVertexes, E)   # macierz sąsiedztwa
-  list = adjacencyLists(numberOfVertexes, E)      # lista sąsiedztwa
 
-  T = Int64[]                                  # kolejność wierzchołków w drzewie
+  T = Int64[]                                     # kolejność wierzchołków w drzewie
 
   while sizeOfQ > 0
     u = extractMin(Q)                             # element o najmniejszym koszcie
     append!(T, u.id)
     sizeOfQ -= 1
 
-    for v in list[u.id]
-      k = isInQ(Q, v)
-      if k != -1 && cost[v] > matrix[u.id,v]
-        prev[v] = u.id                            # uaktualnienie poprzednika wierzchołka
-        cost[v] = matrix[u.id,v]                  # oraz kosztu dotarcia do tego wierzchołka
-        decreaseKey(Q, k, cost[v])                # zmniejszenie priorytetu (tzn. kosztu dotarcia)
+    for v = 1 : numberOfVertexes
+      if matrix[u.id,v] != 0.0
+        k = isInQ(Q, v)
+        if k != -1 && cost[v] > matrix[u.id,v]
+          prev[v] = u.id                            # uaktualnienie poprzednika wierzchołka
+          cost[v] = matrix[u.id,v]                  # oraz kosztu dotarcia do tego wierzchołka
+          decreaseKey(Q, k, cost[v])                # zmniejszenie priorytetu (tzn. kosztu dotarcia)
+        end
       end
     end
   end

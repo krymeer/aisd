@@ -32,3 +32,17 @@ function adjacencyMatrix(n::Int64, E::Array{Edge,1})
   end
   return M
 end
+
+# Znalezienie wierzchołków połączonych krawędzią z k
+function getAdjacent(k::Int64, M::Array{Float64,2})
+  m = Int64(sqrt(length(M)))
+  list = Int64[]
+
+  for i = 1 : m
+    if M[k,i] != 0.0
+      append!(list, i)
+    end
+  end
+
+  return list
+end
