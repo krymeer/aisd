@@ -22,11 +22,11 @@ function prim(V::Array{Int64,1}, E::Array{Edge,1})
   matrix = adjacencyMatrix(numberOfVertexes, E)   # macierz sąsiedztwa
   list = adjacencyLists(numberOfVertexes, E)      # lista sąsiedztwa
 
-  tree = Int64[]                                  # kolejność wierzchołków w drzewie
+  T = Int64[]                                  # kolejność wierzchołków w drzewie
 
   while sizeOfQ > 0
     u = extractMin(Q)                             # element o najmniejszym koszcie
-    append!(tree, u.id)
+    append!(T, u.id)
     sizeOfQ -= 1
 
     for v in list[u.id]
@@ -41,8 +41,8 @@ function prim(V::Array{Int64,1}, E::Array{Edge,1})
 
   costSum = 0
   for i = 1 : numberOfVertexes                    # wyświetlanie rozwiązania
-    if cost[tree[i]] != 0.0 && prev[tree[i]] != -1
-      v1 = tree[i]; v2 = prev[tree[i]]; c = cost[v1]
+    if cost[T[i]] != 0.0 && prev[T[i]] != -1
+      v1 = T[i]; v2 = prev[T[i]]; c = cost[v1]
       costSum += c
       if v1 > v2
         v1, v2 = swapVars(v1, v2)

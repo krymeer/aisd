@@ -50,6 +50,7 @@ function uunion(x::Int64, y::Int64, pparent::Array{Int64,1}, rrank::Array{Int64,
       pparent[idx] = idy            # Pierwsza komponenta staje się poddrzewem drugiej
       if rrank[idx] == rrank[idy]   # Żadna z komponent nie dominuje
         rrank[idy] += 1             # Druga komponenta zaczyna dominować nad pierwszą
+        println(rrank[idy])
       end
     end
   end

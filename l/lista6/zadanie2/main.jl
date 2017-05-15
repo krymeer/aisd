@@ -1,6 +1,6 @@
 # Autor: Krzysztof Osada, 2017
 
-include("graph.jl")
+include("edge.jl")
 include("fileHandling.jl")
 include("appendix.jl")
 include("prim.jl")

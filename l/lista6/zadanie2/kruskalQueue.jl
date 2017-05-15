@@ -1,17 +1,21 @@
 # Autor: Krzysztof Osada, 2017
 
+# Kolejka przechowująca krawędzie grafu
 type kruskalQueue
   v1::Int64
   v2::Int64
   weight::Float64
 end
 
+# Zamiana indeksów krawędzi
 function swapEdges(Q::Array{kruskalQueue}, i::Int64, j::Int64)
   tmp = Q[i]
   Q[i] = Q[j]
   Q[j] = tmp
 end
 
+# Tworzenie kolejki przechowującej krawędzie grafu
+# - posortowane niemalejąco (wg wag)
 function makeEdgeQueue(E::Array{Edge,1})
   n = length(E)
   Q = kruskalQueue[]
@@ -33,6 +37,7 @@ function makeEdgeQueue(E::Array{Edge,1})
   return Q
 end
 
+# tzw. sortowanie przez kopcowanie
 function heapSort(Q::Array{kruskalQueue,1}, n::Int64)  
   nQ = kruskalQueue[]
   
@@ -46,6 +51,7 @@ function heapSort(Q::Array{kruskalQueue,1}, n::Int64)
   return nQ
 end
 
+# Przywracanie właśności kopca na fragmencie drzewa
 function kruskalHeapify(Q::Array{kruskalQueue,1}, i::Int64, n::Int64)
   l = left(i)
   r = right(i)

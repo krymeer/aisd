@@ -1,4 +1,6 @@
 # Autor: Krzysztof Osada, 2017
+# Program służący do zamiany zakresu wierzchołków grafu, jeśli wierzchołki są indeksowane od 0
+# tzn. 0...n => 1...n+1
 
 type Edge
   v1::Int64

@@ -1,19 +1,23 @@
 # Autor: Krzysztof Osada, 2017
 
+# Komunikat wyświetlany w przypadku podania nieprawidłowych argumentów wejściowych
 function helloMessage()
   @printf(STDERR, "\nużycie:\n\t./main <In >Out Alg\ngdzie:\n\tIn: ścieżka do pliku wejściowego\n\tOut: ścieżka do pliku wyjściowego\n\tAlg: wybrany algorytm (Prima bądź Kruskala)\n\n")
 end
 
+# Komunikat wyświetlany w przypadku przekroczenia zadeklarowanej liczby wierzchołków
 function vertexIndexOutOfBounds(k::Int64, n::Int64)
   @printf(STDERR, "\nBłąd: liczba wierzchołków - co najmniej %d - jest większa od zadeklarowanej (%d)\n\n", k, n)
   quit()
 end
 
+# Komunikat wyświetlany w przypadku przekroczenia zadeklarowanej liczby krawędzi
 function edgeIndexOutOfBounds(k::Int64, n::Int64)
   @printf(STDERR, "\nBłąd: liczba krawędzi - co najmniej %d - jest większa od zadeklarowanej (%d)\n\n", k, n)
   quit()
 end
 
+# Pobranie danych z pliku wejściowego
 function getData(stdin::IOStream)
   numberOfVertexes = parse(Int64, readline(stdin))
   V = collect(1:numberOfVertexes)
